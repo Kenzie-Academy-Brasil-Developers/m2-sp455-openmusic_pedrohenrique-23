@@ -107,14 +107,22 @@
     gap: 20px;
   }
   
-  .list-cards li {
-    background-color: var(--color-grey-8);
+  .card{
+    background-color: var(--color-grey-6);
     padding: 20px;
     border-radius: var(--radius-1);
     position: relative;
+    height: 30vh;
+    width: 40vh;
     /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
     /* transition: transform 0.2s ease-in-out; */
   }
+
+  /* Adicione essa regra CSS para ocultar os cards não filtrados */
+.card.hidden {
+  display: none;
+}
+
   
   /* .list-cards li:hover {
     transform: translateY(-5px);
