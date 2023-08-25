@@ -1,33 +1,31 @@
 /* Desenvolva sua lógica aqui ... */
 import { products, categories } from "./productsData.js";
 
+/* Trabalhe sua lógica aqui */
 function createCard(product){
     const card = document.createElement("li")
     card.classList.add("card");
-    /* Trabalhe sua lógica aqui */
     const imgCard = document.createElement("img");
-  imgCard.src = product.img; // Set the image source
-  const bandAgeCard = document.createElement("p");
-  bandAgeCard.innerText = `${product.band} - ${product.year}`;
-  bandAgeCard.classList.add("title-card");
-  const titleCard = document.createElement("h2");
-  titleCard.innerText = product.title;
-  // const payCard = document.createElement("span");
-  // payCard.innerText = "Preço:";
-  const priceCard = document.createElement("span");
-  priceCard.innerText = `R$ ${product.price.toFixed(2)}`;
-  priceCard.classList.add("price-card")
-  const buttonPayCard = document.createElement("button");
-  buttonPayCard.innerText = "Comprar";
-  buttonPayCard.classList.add("btn-pay");
+    imgCard.src = product.img;
+    const bandAgeCard = document.createElement("p");
+    bandAgeCard.innerText = `${product.band} - ${product.year}`;
+    bandAgeCard.classList.add("title-card");
+    const titleCard = document.createElement("h2");
+    titleCard.innerText = product.title;
+    const priceCard = document.createElement("span");
+    priceCard.innerText = `R$ ${product.price.toFixed(2)}`;
+    priceCard.classList.add("price-card")
+    const buttonPayCard = document.createElement("button");
+    buttonPayCard.innerText = "Comprar";
+    buttonPayCard.classList.add("btn-pay");
 
   card.appendChild(imgCard);
   card.appendChild(bandAgeCard);
   card.appendChild(titleCard);
-  // card.appendChild(payCard);
   card.appendChild(priceCard);
   card.appendChild(buttonPayCard);
-    return card
+  
+  return card
 }
 
 function renderFilterButtons(array) {
@@ -42,12 +40,10 @@ function renderFilterButtons(array) {
     });
   }
 
-  function renderCards(array) {
+function renderCards(array) {
     const listCards = document.querySelector(".list-cards");
     
-    while (listCards.firstChild) {
-      listCards.removeChild(listCards.firstChild);
-    }
+    listCards.innerHTML = "";
 
     array.forEach(product => {
       const card = createCard(product);
@@ -60,50 +56,77 @@ function renderFilterButtons(array) {
 
   // TAREFA 2
 
-  function addEventListenersToButtons(categories, products) {
+  function addEvents(categories, products) {
     const filterButtons = document.querySelectorAll(".list-filters_button");
-  
+    const priceInput = document.querySelector(".input-range");
+    const priceParagraph = document.querySelector(".text-price");
+
+    let filteredArray = products;
+    let categoryIndex = 0;
+    let inputValue = priceInput.value;
+
+    priceInput.addEventListener("input", () => {
+     priceParagraph.innerText = `Até R$ ${inputValue}`;
+    })
+    
     filterButtons.forEach(button => {
       button.addEventListener("click", () => {
         const buttonText = button.innerText;
-        const categoryIndex = categories.indexOf(buttonText);
-  
+        categoryIndex = categories.indexOf(buttonText);
+        
         if (categoryIndex === 0) {
-          renderCards(products);
-          // console.log("Todos os generos");
+          filteredArray = products.filter(product => product.price <= parseFloat(inputValue));
         } else {
-          const filteredProducts = products.filter(product => product.category === categoryIndex);
-          // console.log("Genero filtrado:", filteredProducts);
-          renderCards(filteredProducts);
+          filteredArray = products.filter(product => 
+            product.category === categoryIndex && product.price <= parseFloat(inputValue)
+          );
         }
+        
+        const allCards = document.querySelectorAll(".card");
+        allCards.forEach(card => {
+          card.classList.remove("hidden");
+        });
+  
+        // Adição da classe "hidden" apenas aos cards que não fazem parte da filtragem
+        allCards.forEach((card, index) => {
+          const product = filteredArray[index];
+          
+          if (!product) {
+            card.classList.add("hidden");
+          }
+        });
+  
+        renderCards(filteredArray);
       });
     });
   
-    const priceInput = document.querySelector(".input-range");
-    const priceParagraph = document.querySelector(".container__price p");
-  
     priceInput.addEventListener("input", () => {
-      const selectedPrice = parseFloat(priceInput.value);
-      priceParagraph.innerText = `Até R$ ${selectedPrice.toFixed(2)}`;
-      const filteredProducts = products.filter(product => product.price <= selectedPrice);
-
+      inputValue = priceInput.value;
+      if (categoryIndex === 0) {
+        filteredArray = products.filter(product => product.price <= parseFloat(inputValue));
+      } else {
+        filteredArray = products.filter(product => 
+          product.category === categoryIndex && product.price <= parseFloat(inputValue)
+        );
+      }
+  
+      // Remoção da classe "hidden" dos cards
       const allCards = document.querySelectorAll(".card");
-  allCards.forEach(card => {
-    card.classList.remove("hidden");
-  });
-
-  // Adicione a classe "hidden" apenas aos cards que não fazem parte da filtragem
-  allCards.forEach(card => {
-    if (!filteredProducts.some(product => product.id.toString() === card.dataset.productId)) {
-      card.classList.add("hidden");
-    }
-  });
-
-      renderCards(filteredProducts);
+      allCards.forEach(card => {
+        card.classList.remove("hidden");
+      });
+  
+      // Adição da classe "hidden" apenas aos cards que não fazem parte da filtragem
+      allCards.forEach((card, index) => {
+        const product = filteredArray[index];
+        
+        if (!product) {
+          card.classList.add("hidden");
+        }
+      });
+  
+      renderCards(filteredArray);
     });
   }
   
-  // Chamar a função addEventListenersToButtons passando os arrays de categorias e produtos
-  addEventListenersToButtons(categories, products);
-  
-  
+  addEvents(categories, products);
