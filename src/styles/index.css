@@ -113,7 +113,6 @@
   
   .card{
     background-color: var(--color-grey-8);
-    /* padding: 20px; */
     border-radius: var(--radius-1);
     position: relative;
     height: 40vh;

@@ -56,8 +56,6 @@ function renderCards(array) {
   renderFilterButtons(categories);
   renderCards(products);
 
-  // TAREFA 2
-
   function addEvents(categories, products) {
     const filterButtons = document.querySelectorAll(".list-filters_button");
     const priceInput = document.querySelector(".input-range");
@@ -89,7 +87,6 @@ function renderCards(array) {
           card.classList.remove("hidden");
         });
   
-        // Adição da classe "hidden" apenas aos cards que não fazem parte da filtragem
         allCards.forEach((card, index) => {
           const product = filteredArray[index];
           
@@ -112,13 +109,11 @@ function renderCards(array) {
         );
       }
   
-      // Remoção da classe "hidden" dos cards
       const allCards = document.querySelectorAll(".card");
       allCards.forEach(card => {
         card.classList.remove("hidden");
       });
   
-      // Adição da classe "hidden" apenas aos cards que não fazem parte da filtragem
       allCards.forEach((card, index) => {
         const product = filteredArray[index];
         
