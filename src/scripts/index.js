@@ -1,5 +1,6 @@
 /* Desenvolva sua lógica aqui ... */
 import { products, categories } from "./productsData.js";
+import { handleDarkMode } from "./theme.js"
 
 /* Trabalhe sua lógica aqui */
 function createCard(product){
@@ -7,6 +8,7 @@ function createCard(product){
     card.classList.add("card");
     const imgCard = document.createElement("img");
     imgCard.src = product.img;
+    imgCard.classList.add("img-card");
     const bandAgeCard = document.createElement("p");
     bandAgeCard.innerText = `${product.band} - ${product.year}`;
     bandAgeCard.classList.add("title-card");
@@ -128,5 +130,16 @@ function renderCards(array) {
       renderCards(filteredArray);
     });
   }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const priceInput = document.querySelector(".input-range");
+    const priceParagraph = document.querySelector(".text-price");
+    const maxValue = priceInput.getAttribute("max");
+  
+    priceInput.value = maxValue;
+    priceParagraph.innerText = `Até R$ ${maxValue}`;
+  });
   
   addEvents(categories, products);
+  handleDarkMode();
+
